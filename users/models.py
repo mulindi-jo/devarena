@@ -24,8 +24,8 @@ class Profile(DefaultField):
 
 
 class ProfileSocialNetwork(DefaultField):
-    profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    social_network = models.ForeignKey(SocialNetwork, on_delete=models.DO_NOTHING)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    social_network = models.ForeignKey(SocialNetwork, on_delete=models.CASCADE)
     profile_url = models.CharField(max_length=1000, null=True, blank=True, default='#')
 
     class Meta(object):
@@ -38,7 +38,7 @@ class ProfileSocialNetwork(DefaultField):
 
 
 class Skill(DefaultField):
-    profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, null=True, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
