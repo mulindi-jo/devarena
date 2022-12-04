@@ -1,51 +1,8 @@
-import datetime
-import uuid
 
-from django.core.exceptions import FieldError
 from django.db import models
 
-
-class ArchivedManager(models.Manager):
-    def get_queryset(self):
-        queryset = super(ArchivedManager, self).get_queryset().filter(is_deleted=False)
-        try:
-            qs = queryset.filter(is_archive=True)
-        except FieldError:
-            qs = queryset
-
-        # request = get_request()
-
-        return qs
-
-
-class DeletedManager(models.Manager):
-    def get_queryset(self):
-        qs = super(DeletedManager, self).get_queryset().filter(is_delete=True)
-
-        # request = get_request()
-
-        return qs
-
-
-class DefaultField(models.Model):
-    # archived_objects = ArchivedManager()
-    # deleted_objects = DeletedManager()
-
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(blank=True)
-    is_deleted = models.BooleanField(default=False)
-    is_archived = models.BooleanField(default=False)
-
-    class Meta:
-        abstract = True
-        # app_label = 'Projects'
-
-    def save(self, *args, **kwargs):
-        self.date_modified = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-        self.full_clean()
-        super(DefaultField, self).save()
-        return super(DefaultField, self).save()
+from cache.models import DefaultField
+from users.models import Profile
 
 
 class Project(DefaultField):
@@ -56,6 +13,7 @@ class Project(DefaultField):
     vote_count = models.IntegerField(default=0, null=True, blank=True)
     vote_ratio = models.IntegerField(default=0, null=True, blank=True)
     project_avatar = models.ImageField(null=True, blank=True, default="default.jpg")
+    project_owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.DO_NOTHING)
     tags = models.ManyToManyField('Tag', blank=True)
 
     def __str__(self):
@@ -74,7 +32,7 @@ class Review(DefaultField):
     )
     review_body = models.TextField(null=True, blank=True)
     vote_value = models.CharField(max_length=30, choices=VOTE_TYPE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return '{} - {} Vote'.format(self.project, self.vote_value)
