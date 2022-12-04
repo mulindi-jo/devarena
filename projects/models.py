@@ -13,7 +13,7 @@ class Project(DefaultField):
     vote_count = models.IntegerField(default=0, null=True, blank=True)
     vote_ratio = models.IntegerField(default=0, null=True, blank=True)
     project_avatar = models.ImageField(null=True, blank=True, default="default.jpg")
-    project_owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.DO_NOTHING)
+    project_owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', blank=True)
 
     def __str__(self):
@@ -32,7 +32,7 @@ class Review(DefaultField):
     )
     review_body = models.TextField(null=True, blank=True)
     vote_value = models.CharField(max_length=30, choices=VOTE_TYPE)
-    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
     def __str__(self):
         return '{} - {} Vote'.format(self.project, self.vote_value)

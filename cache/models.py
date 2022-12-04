@@ -30,6 +30,7 @@ class DefaultField(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(blank=True)
+    date_deleted = models.DateTimeField(blank=True, null=True)
     is_deleted = models.BooleanField(default=False)
     is_archived = models.BooleanField(default=False)
 
@@ -42,6 +43,13 @@ class DefaultField(models.Model):
         self.full_clean()
         super(DefaultField, self).save()
         return super(DefaultField, self).save()
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_deleted = True
+        self.date_deleted = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+        self.save()
+        return
+
 
 class SocialNetwork(DefaultField):
     social_network = models.CharField(max_length=100)
