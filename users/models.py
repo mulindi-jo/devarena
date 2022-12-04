@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 from cache.models import SocialNetwork, DefaultField
@@ -47,6 +48,3 @@ class Skill(DefaultField):
 
     def __str__(self):
         return str(self.name)
-
-
-
