@@ -1,8 +1,9 @@
 
+
 from django.db import models
 from django.contrib.auth.models import User
-from cache.models import SocialNetwork, DefaultField
 
+from cache.models import SocialNetwork, DefaultField
 
 class Profile(DefaultField):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
