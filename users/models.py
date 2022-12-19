@@ -5,7 +5,7 @@ from cache.models import SocialNetwork, DefaultField
 
 
 class Profile(DefaultField):
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     tech_stack = models.CharField(max_length=100, blank=True, null=True, default='')

@@ -36,7 +36,6 @@ class DefaultField(models.Model):
 
     class Meta:
         abstract = True
-        # app_label = 'Projects'
 
     def save(self, *args, **kwargs):
         self.date_modified = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
